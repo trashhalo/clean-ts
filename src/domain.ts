@@ -5,6 +5,11 @@ export interface Counter {
 
 class CounterEntity implements Counter{
   constructor(public readonly value: number) {}
+
+  static default(): Counter {
+    return new CounterEntity(0);
+  }
+
   increment(): Counter {
     return new CounterEntity(this.value + 1);
   }
@@ -39,7 +44,7 @@ export class LoadUseCase {
   async execute(): Promise<Counter> {
     const c = await this.persistence.load();
     if (c === undefined) {
-      return new CounterEntity(0);
+      return CounterEntity.default();
     }
     return c;
   }
